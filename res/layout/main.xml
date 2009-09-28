@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<AbsoluteLayout android:layout_width="fill_parent"
+	android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/main_frame">
+	<TextView android:layout_height="wrap_content" android:id="@+id/text_output"
+		android:layout_width="fill_parent"
+		android:layout_y="5dip" android:textSize="25dip"></TextView>
+	<Button android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/d4"
+		android:text="  D4   " android:clickable="true" android:layout_x="5dip"
+		android:layout_y="40dip"></Button>
+
+<Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="  D6   " android:layout_x="65dip" android:layout_y="40dip" android:id="@+id/d6"></Button>
+	<Button android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:id="@+id/d12" android:text="  D12   " android:layout_x="5dip" android:layout_y="90dip"></Button>
+	<Button android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:layout_x="185dip"
+		android:layout_y="40dip" android:text="  D10   " android:id="@+id/d10"></Button>
+	<Button android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:id="@+id/d8"
+		android:layout_x="125dip" android:text="  D8   " android:layout_y="40dip"></Button>
+<Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/d20" android:text="  D20   " android:layout_y="90dip" android:layout_x="75dip"></Button>
+<Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="  D100   " android:id="@+id/d100" android:layout_y="90dip" android:layout_x="145dip"></Button>
+</AbsoluteLayout>
