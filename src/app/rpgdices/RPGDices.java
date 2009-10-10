@@ -1,5 +1,6 @@
 package app.rpgdices;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import android.app.Activity;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 public class RPGDices extends Activity
 {
+	private ArrayList<Integer> rolled;
+	
 	private Random random;
 	
 	@Override
@@ -19,6 +22,7 @@ public class RPGDices extends Activity
 		setContentView(R.layout.main);
 		
 		random = new Random(System.currentTimeMillis());
+		rolled = new ArrayList<Integer>();
 
 		findViewById(R.id.d4).setOnClickListener(new OnClickListener()
 		{
@@ -88,10 +92,34 @@ public class RPGDices extends Activity
 				t.setText(roll(100));
 			}
 		});
+		
+		findViewById(R.id.clear).setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				rolled.clear();
+				TextView t = (TextView) findViewById(R.id.text_output);
+				t.setText("");
+			}
+		});
 	}
 
-	public String roll(int n)
+	public String roll(int _n)
 	{
-		return "  " + (random.nextInt(n) + 1) + "";
+		String result = null;
+		int sum = 0;
+		rolled.add((random.nextInt(_n) + 1));
+		for (Integer n : rolled)
+		{
+			if (n != null)
+			{
+				result = result == null ? "" + n : result + " + " + n;
+				sum += n;
+			}
+		}
+		result = result == null ? "" + sum : result + " = (" + sum + ")";
+		
+		return result;
 	}
 }
