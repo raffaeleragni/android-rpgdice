@@ -26,7 +26,6 @@ public class RPGDices extends Activity
 
 		findViewById(R.id.d4).setOnClickListener(new OnClickListener()
 		{
-			@Override
 			public void onClick(View v)
 			{
 				TextView t = (TextView) findViewById(R.id.text_output);
@@ -36,7 +35,6 @@ public class RPGDices extends Activity
 
 		findViewById(R.id.d6).setOnClickListener(new OnClickListener()
 		{
-			@Override
 			public void onClick(View v)
 			{
 				TextView t = (TextView) findViewById(R.id.text_output);
@@ -45,7 +43,6 @@ public class RPGDices extends Activity
 		});
 		findViewById(R.id.d8).setOnClickListener(new OnClickListener()
 		{
-			@Override
 			public void onClick(View v)
 			{
 				TextView t = (TextView) findViewById(R.id.text_output);
@@ -55,7 +52,6 @@ public class RPGDices extends Activity
 
 		findViewById(R.id.d10).setOnClickListener(new OnClickListener()
 		{
-			@Override
 			public void onClick(View v)
 			{
 				TextView t = (TextView) findViewById(R.id.text_output);
@@ -65,7 +61,6 @@ public class RPGDices extends Activity
 
 		findViewById(R.id.d12).setOnClickListener(new OnClickListener()
 		{
-			@Override
 			public void onClick(View v)
 			{
 				TextView t = (TextView) findViewById(R.id.text_output);
@@ -75,7 +70,6 @@ public class RPGDices extends Activity
 
 		findViewById(R.id.d20).setOnClickListener(new OnClickListener()
 		{
-			@Override
 			public void onClick(View v)
 			{
 				TextView t = (TextView) findViewById(R.id.text_output);
@@ -85,7 +79,6 @@ public class RPGDices extends Activity
 
 		findViewById(R.id.d100).setOnClickListener(new OnClickListener()
 		{
-			@Override
 			public void onClick(View v)
 			{
 				TextView t = (TextView) findViewById(R.id.text_output);
@@ -95,7 +88,6 @@ public class RPGDices extends Activity
 		
 		findViewById(R.id.clear).setOnClickListener(new OnClickListener()
 		{
-			@Override
 			public void onClick(View v)
 			{
 				rolled.clear();
