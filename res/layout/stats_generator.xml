@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout android:layout_width="fill_parent"
+	android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+stats_id/main_frame">
+	<TextView android:layout_width="wrap_content" android:id="@+stats_id/result1"
+		android:layout_height="wrap_content" android:text="" android:minLines="6"
+		android:layout_x="15dip" android:layout_y="75dip" android:textSize="30dip"
+		android:minWidth="100dip"></TextView>
+	<TextView android:layout_width="wrap_content" android:id="@+stats_id/result2"
+		android:layout_height="wrap_content" android:text="" android:minLines="6"
+		android:layout_x="165dip" android:layout_y="75dip" android:textSize="30dip"
+		android:minWidth="100dip"></TextView>
+	<Button android:layout_width="wrap_content" android:id="@+stats_id/roll"
+		android:layout_height="wrap_content" android:text="  Roll  "
+		android:layout_y="5dip" android:layout_x="5dip"></Button>
+</AbsoluteLayout>
