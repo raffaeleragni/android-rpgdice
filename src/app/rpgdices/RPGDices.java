@@ -149,7 +149,7 @@ public class RPGDices extends Activity
 		}
 		int n = (random.nextInt(_n) + 1);
 		rolled.add(n);
-		result += (result == null ? "" : result) + " [" + n + "]";
+		result = (result == null ? "" : result + " + ") + " [" + n + "]";
 		result = result + " = (" + sum + ")";
 
 		return result;
