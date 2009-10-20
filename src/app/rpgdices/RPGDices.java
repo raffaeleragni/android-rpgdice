@@ -81,6 +81,15 @@ public class RPGDices extends Activity
 			}
 		});
 
+		findViewById(R.id.d30).setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				TextView t = (TextView) findViewById(R.id.text_output);
+				t.setText(roll(30));
+			}
+		});
+
 		findViewById(R.id.d100).setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
@@ -130,7 +139,6 @@ public class RPGDices extends Activity
 	{
 		String result = null;
 		int sum = 0;
-		rolled.add(roll(_n));
 		for (Integer n : rolled)
 		{
 			if (n != null)
@@ -139,7 +147,10 @@ public class RPGDices extends Activity
 				sum += n;
 			}
 		}
-		result = result == null ? "" + sum : result + " = (" + sum + ")";
+		int n = (random.nextInt(_n) + 1);
+		rolled.add(n);
+		result += (result == null ? "" : result) + " [" + n + "]";
+		result = result + " = (" + sum + ")";
 
 		return result;
 	}

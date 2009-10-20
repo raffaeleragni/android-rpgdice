@@ -26,4 +26,5 @@
 <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/d20" android:text="  D20   " android:layout_x="75dip" android:layout_y="55dip"></Button>
 <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="  D100   " android:id="@+id/d100" android:layout_x="145dip" android:layout_y="55dip"></Button>
 <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/clear" android:text="  C   " android:layout_x="265dip" android:layout_y="105dip"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_y="55dip" android:text="  D30   " android:layout_x="220dip" android:id="@+id/d30"></Button>
 </AbsoluteLayout>
