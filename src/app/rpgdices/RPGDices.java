@@ -86,7 +86,7 @@ public class RPGDices extends Activity
 			public void onClick(View v)
 			{
 				TextView t = (TextView) findViewById(R.id.text_output);
-				t.setText(roll(30));
+				t.setText(roll_and_display(30));
 			}
 		});
 
@@ -139,6 +139,7 @@ public class RPGDices extends Activity
 	{
 		String result = null;
 		int sum = 0;
+		rolled.add((random.nextInt(_n) + 1));
 		for (Integer n : rolled)
 		{
 			if (n != null)
@@ -147,11 +148,8 @@ public class RPGDices extends Activity
 				sum += n;
 			}
 		}
-		int n = (random.nextInt(_n) + 1);
-		rolled.add(n);
-		result = (result == null ? "" : result + " + ") + " [" + n + "]";
-		result = result + " = (" + sum + ")";
-
+		result = result == null ? "" + sum : result + " = (" + sum + ")";
+		
 		return result;
 	}
 
