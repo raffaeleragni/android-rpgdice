@@ -1,4 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	
-<item android:title="DND Character Stats" android:id="@+menu_id/dnd_character_stats"></item>
+	<item
+		android:title="Add Die"
+		android:id="@+menu_id/add_die">
+	>
+	</item>
+	<item
+		android:title="DND Character Stats"
+		android:id="@+menu_id/dnd_character_stats">
+	</item>
 </menu>

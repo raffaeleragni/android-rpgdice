@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/table">
 
-
-
-<AbsoluteLayout android:layout_width="fill_parent"
-	android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/main_frame">
-	<TextView android:layout_height="wrap_content" android:id="@+id/text_output"
-		android:layout_width="fill_parent"
-		android:focusableInTouchMode="true" android:layout_y="155dip" android:gravity="right" android:textSize="20dip"></TextView>
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/d4"
-		android:text="  D4   " android:clickable="true" android:layout_x="5dip"
-		android:isScrollContainer="false" android:layout_y="5dip"></Button>
-
-<Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="  D6   " android:layout_x="65dip" android:id="@+id/d6" android:layout_y="5dip"></Button>
-	<Button android:layout_height="wrap_content"
+	<Spinner
+		android:id="@+id/profiles"
 		android:layout_width="wrap_content"
-		android:id="@+id/d12" android:text="  D12   " android:layout_x="5dip" android:layout_y="55dip"></Button>
-	<Button android:layout_height="wrap_content"
-		android:layout_width="wrap_content" android:layout_x="185dip"
-		android:text="  D10   " android:id="@+id/d10" android:layout_y="5dip"></Button>
-	<Button android:layout_height="wrap_content"
-		android:layout_width="wrap_content" android:id="@+id/d8"
-		android:layout_x="125dip" android:text="  D8   " android:layout_y="5dip"></Button>
-<Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/d20" android:text="  D20   " android:layout_x="75dip" android:layout_y="55dip"></Button>
-<Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="  D100   " android:id="@+id/d100" android:layout_x="145dip" android:layout_y="55dip"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/clear" android:text="  C   " android:layout_x="265dip" android:layout_y="105dip"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_y="55dip" android:text="  D30   " android:layout_x="220dip" android:id="@+id/d30"></Button>
-</AbsoluteLayout>
+		android:layout_height="wrap_content">
+	</Spinner>
+	
+	<TableRow android:id="@+id/header">
+	
+		
+		
+	</TableRow>
+	
+</TableLayout>

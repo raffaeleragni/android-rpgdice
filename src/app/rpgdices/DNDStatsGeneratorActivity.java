@@ -61,7 +61,7 @@ public class DNDStatsGeneratorActivity extends Activity
 		int rolled = 0, sum = 0, lowest = 99;
 		for (int i = 0; i < 4; i++)
 		{
-			rolled = RPGDices.roll(6);
+			rolled = RPGDice.roll(6);
 			lowest = rolled < lowest ? rolled : lowest;
 			sum += rolled;
 		}
