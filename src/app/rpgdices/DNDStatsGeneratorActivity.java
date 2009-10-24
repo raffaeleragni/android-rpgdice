@@ -18,6 +18,8 @@
  */
 package app.rpgdices;
 
+import java.util.Random;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,11 +29,15 @@ import android.widget.TextView;
 
 public class DNDStatsGeneratorActivity extends Activity
 {
+	private static Random random;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.stats_generator);
+		
+		random = new Random(System.currentTimeMillis());
 
 		((Button) findViewById(R.stats_id.roll)).setOnClickListener(new OnClickListener()
 		{
@@ -61,11 +67,17 @@ public class DNDStatsGeneratorActivity extends Activity
 		int rolled = 0, sum = 0, lowest = 99;
 		for (int i = 0; i < 4; i++)
 		{
-			rolled = RPGDice.roll(6);
+			rolled = roll(6);
 			lowest = rolled < lowest ? rolled : lowest;
 			sum += rolled;
 		}
 
 		return sum - lowest;
+	}
+	
+	private static int roll(int die)
+	{
+		// TODO
+		return (random.nextInt(die) + 1);
 	}
 }

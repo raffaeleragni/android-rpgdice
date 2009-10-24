@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RPG Dice</string>
+    <string name="LABEL_0"></string>
+    <string name="LABEL_1">Die</string>
+    <string name="LABEL_2">Sum/T</string>
+    <string name="LABEL_3">Multiply</string>
+    <string name="LABEL_4">Strategy</string>
+    <string name="ROLL">Roll</string>
 </resources>
