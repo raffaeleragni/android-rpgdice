@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:title="New Set" android:id="@+menu_id/dnd_character_stats"></item>
-	<item android:title="Change Set" android:id="@+menu_id/dnd_character_stats"></item>
-	<item android:title="New Die" android:id="@+menu_id/dnd_character_stats"></item>
+	<item android:title="New Set" android:id="@+menu_id/new_set"></item>
+	<item android:title="Change Set" android:id="@+menu_id/change_set"></item>
+	<item android:title="New Die" android:id="@+menu_id/new_die"></item>
 	<item android:title="Other Tools" android:id="@+menu_id/other_tools">
 		<menu>
 			<item android:title="DND Character Stats" android:id="@+menu_id/dnd_character_stats"> </item>

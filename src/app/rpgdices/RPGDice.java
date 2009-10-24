@@ -28,8 +28,6 @@ public class RPGDice extends Activity
 	private static final int[] LABEL_CODES = new int[] { R.string.LABEL_0, R.string.LABEL_1, R.string.LABEL_2, R.string.LABEL_3,
 			R.string.LABEL_4 };
 
-	private static Random random;
-
 	private ArrayList<DieRow> rows = new ArrayList<DieRow>();
 
 	private TextView result;
@@ -41,10 +39,9 @@ public class RPGDice extends Activity
 		setContentView(R.layout.main);
 
 		result = (TextView) findViewById(R.id.result);
-		random = new Random(System.currentTimeMillis());
 
 		// TODO: use profiles
-		loadDiceSet(DefaultDiceSets.ww);
+		loadDiceSet(DefaultDiceSets.dnd);
 	}
 
 	private void loadDiceSet(DiceSet set)
@@ -91,12 +88,16 @@ public class RPGDice extends Activity
 		count.setText("" + ncount);
 		count.setWidth(60);
 		tr_controls.addView(count);
-		
+
 		int val = 0;
 		switch (target_strategy)
 		{
-			case TargetStrategies.NONE: val = nsum; break;
-			case TargetStrategies.TARGET_AT_LEAST: val = target; break;
+			case TargetStrategies.NONE:
+				val = nsum;
+				break;
+			case TargetStrategies.TARGET_AT_LEAST:
+				val = target;
+				break;
 		}
 		EditText sum = new EditText(this);
 		sum.setText("" + val);
@@ -188,6 +189,8 @@ public class RPGDice extends Activity
 
 	private static String roll(int die, int sum_or_target, int count, int strategy)
 	{
+		Random random = new Random(System.currentTimeMillis());
+
 		switch (strategy)
 		{
 			case TargetStrategies.NONE:
