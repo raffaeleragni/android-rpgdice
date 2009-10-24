@@ -4,7 +4,11 @@
     <string name="LABEL_0"></string>
     <string name="LABEL_1">Die</string>
     <string name="LABEL_2">Sum/T</string>
-    <string name="LABEL_3">Multiply</string>
+    <string name="LABEL_3">Count</string>
     <string name="LABEL_4">Strategy</string>
     <string name="ROLL">Roll</string>
+    <string-array name="STRATEGIES">
+        <item>None</item>
+        <item>Successes</item>
+    </string-array>
 </resources>

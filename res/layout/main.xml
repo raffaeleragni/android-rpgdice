@@ -7,9 +7,10 @@
 
 	<TextView
 		android:id="@+id/result"
-		android:text="20"
-		android:textSize="30dip"
-		android:gravity="right|center_vertical"
+		android:text=""
+		android:textSize="20dip"
+		android:gravity="right|bottom"
+		android:height="80dip"
 		android:layout_marginRight="4dip">
 	</TextView>
 

@@ -2,6 +2,7 @@ package app.rpgdices;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.TreeMap;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -42,7 +44,7 @@ public class RPGDice extends Activity
 		random = new Random(System.currentTimeMillis());
 
 		// TODO: use profiles
-		loadDiceSet(DefaultDiceSets.dnd);
+		loadDiceSet(DefaultDiceSets.ww);
 	}
 
 	private void loadDiceSet(DiceSet set)
@@ -57,6 +59,7 @@ public class RPGDice extends Activity
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private DieRow newDieRow(int ndie, int nsum, int ncount, int target_strategy, int target)
 	{
 		DieRow row = new DieRow();
@@ -95,6 +98,9 @@ public class RPGDice extends Activity
 		tr_controls.addView(count);
 
 		Spinner strategy = new Spinner(this);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.STRATEGIES, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		strategy.setAdapter(adapter);
 		tr_controls.addView(strategy);
 
 		roll_button.setOnClickListener(row.roll_clicked);
@@ -179,18 +185,66 @@ public class RPGDice extends Activity
 		{
 			case TargetStrategies.NONE:
 			{
-				break;
+				int total = 0;
+				TreeMap<Integer, Integer> results = new TreeMap<Integer, Integer>();
+				String sresults = null;
+				for (int i = 0; i < count; i++)
+				{
+					int result = random.nextInt(die) + 1;
+					if (!results.containsKey(result))
+					{
+						results.put(result, 1);
+					}
+					else
+					{
+						results.put(result, results.get(result) + 1);
+					}
+					total += result + sum_or_target;
+				}
+				for (Integer k : results.keySet())
+				{
+					String sresult = k + "(+" + sum_or_target + ")";
+					sresults = sresults == null ? sresult : sresults + ", " + sresult;
+				}
+				sresults = sresults == null ? "" : sresults;
+				sresults += "\nTotal: " + total;
+
+				return sresults;
 			}
 			case TargetStrategies.TARGET_AT_LEAST:
 			{
-				break;
-			}
-			case TargetStrategies.TARGET_AT_UNDER:
-			{
-				break;
+				TreeMap<Integer, Integer> results = new TreeMap<Integer, Integer>();
+				int successes = 0;
+				String sresults = null;
+				for (int i = 0; i < count; i++)
+				{
+					int result = random.nextInt(die) + 1;
+					if (!results.containsKey(result))
+					{
+						results.put(result, 1);
+					}
+					else
+					{
+						results.put(result, results.get(result) + 1);
+					}
+					if (result >= sum_or_target)
+					{
+						successes++;
+					}
+
+				}
+				for (Integer k : results.keySet())
+				{
+					String sresult = k + "(" + results.get(k) + ")";
+					sresults = sresults == null ? sresult : sresults + ", " + sresult;
+				}
+				sresults = sresults == null ? "" : sresults;
+				sresults += "\nSuccesses: " + successes;
+
+				return sresults;
 			}
 		}
-		// TODO
-		return "" + (random.nextInt(die) + 1);
+
+		return "";
 	}
 }
