@@ -87,20 +87,27 @@ public class RPGDice extends Activity
 		die.setWidth(60);
 		tr_controls.addView(die);
 
-		EditText sum = new EditText(this);
-		sum.setText("" + nsum);
-		sum.setWidth(60);
-		tr_controls.addView(sum);
-
 		EditText count = new EditText(this);
 		count.setText("" + ncount);
 		count.setWidth(60);
 		tr_controls.addView(count);
+		
+		int val = 0;
+		switch (target_strategy)
+		{
+			case TargetStrategies.NONE: val = nsum; break;
+			case TargetStrategies.TARGET_AT_LEAST: val = target; break;
+		}
+		EditText sum = new EditText(this);
+		sum.setText("" + val);
+		sum.setWidth(60);
+		tr_controls.addView(sum);
 
 		Spinner strategy = new Spinner(this);
 		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.STRATEGIES, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		strategy.setAdapter(adapter);
+		strategy.setSelection(target_strategy);
 		tr_controls.addView(strategy);
 
 		roll_button.setOnClickListener(row.roll_clicked);
@@ -199,15 +206,15 @@ public class RPGDice extends Activity
 					{
 						results.put(result, results.get(result) + 1);
 					}
-					total += result + sum_or_target;
+					total += result;
 				}
 				for (Integer k : results.keySet())
 				{
-					String sresult = k + "(+" + sum_or_target + ")";
+					String sresult = results.get(k) + "x" + k;
 					sresults = sresults == null ? sresult : sresults + ", " + sresult;
 				}
 				sresults = sresults == null ? "" : sresults;
-				sresults += "\nTotal: " + total;
+				sresults += "\nTotal: " + total + "+" + sum_or_target + " = " + (total + sum_or_target);
 
 				return sresults;
 			}
