@@ -3,29 +3,24 @@ package app.rpgdices.data;
 public class DieConfiguration
 {
 	public int die;
-	public int sum;
 	public int count;
-	public boolean count_with_sum;
+	public int sum_or_target;
 	public int target_strategy;
 	public int target;
 	
 	public DieConfiguration()
 	{
 		die = 6;
-		sum = 0;
+		sum_or_target = 0;
 		count = 1;
-		count_with_sum = false;
 		target_strategy = TargetStrategies.NONE;
-		target = 1;
 	}
 
-	public DieConfiguration(int die, int sum, int count, boolean count_with_sum, int target_strategy, int target)
+	public DieConfiguration(int die, int count, int sum_or_target, int target_strategy)
 	{
 		this.die = die;
-		this.sum = sum;
+		this.sum_or_target = sum_or_target;
 		this.count = count;
-		this.count_with_sum = count_with_sum;
 		this.target_strategy = target_strategy;
-		this.target = target;
 	}
 }

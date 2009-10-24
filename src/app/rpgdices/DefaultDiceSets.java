@@ -8,26 +8,26 @@ public class DefaultDiceSets
 {
 	public static final DiceSet dnd = new DiceSet
 	(
-		new DieConfiguration(20, 0, 1, true, TargetStrategies.NONE, 1),
-		new DieConfiguration(4, 0, 1, true, TargetStrategies.NONE, 1),
-		new DieConfiguration(6, 0, 1, true, TargetStrategies.NONE, 1),
-		new DieConfiguration(8, 0, 1, true, TargetStrategies.NONE, 1),
-		new DieConfiguration(10, 0, 1, true, TargetStrategies.NONE, 1),
-		new DieConfiguration(12, 0, 1, true, TargetStrategies.NONE, 1),
-		new DieConfiguration(100, 0, 1, true, TargetStrategies.NONE, 1),
-		new DieConfiguration(2, 0, 1, true, TargetStrategies.NONE, 1),
-		new DieConfiguration(3, 0, 1, true, TargetStrategies.NONE, 1),
-		new DieConfiguration(30, 0, 1, true, TargetStrategies.NONE, 1)
+		new DieConfiguration(20, 1, 0, TargetStrategies.NONE),
+		new DieConfiguration(4, 1, 0, TargetStrategies.NONE),
+		new DieConfiguration(6, 1, 0, TargetStrategies.NONE),
+		new DieConfiguration(8, 1, 0, TargetStrategies.NONE),
+		new DieConfiguration(10, 1, 0, TargetStrategies.NONE),
+		new DieConfiguration(12, 1, 0, TargetStrategies.NONE),
+		new DieConfiguration(100, 1, 0, TargetStrategies.NONE),
+		new DieConfiguration(2, 1, 0, TargetStrategies.NONE),
+		new DieConfiguration(3, 1, 0, TargetStrategies.NONE),
+		new DieConfiguration(30, 1, 0, TargetStrategies.NONE)
 	);
 	
 	public static final DiceSet ww = new DiceSet
 	(
-		new DieConfiguration(10, 0, 1, true, TargetStrategies.TARGET_AT_LEAST, 6),
-		new DieConfiguration(10, 0, 2, true, TargetStrategies.TARGET_AT_LEAST, 6),
-		new DieConfiguration(10, 0, 4, true, TargetStrategies.TARGET_AT_LEAST, 6),
-		new DieConfiguration(10, 0, 6, true, TargetStrategies.TARGET_AT_LEAST, 6),
-		new DieConfiguration(10, 0, 8, true, TargetStrategies.TARGET_AT_LEAST, 6),
-		new DieConfiguration(10, 0, 4, true, TargetStrategies.TARGET_AT_LEAST, 6),
-		new DieConfiguration(10, 0, 10, true, TargetStrategies.TARGET_AT_LEAST, 6)
+		new DieConfiguration(10, 6, 1, TargetStrategies.TARGET_AT_LEAST),
+		new DieConfiguration(10, 6, 2, TargetStrategies.TARGET_AT_LEAST),
+		new DieConfiguration(10, 6, 4, TargetStrategies.TARGET_AT_LEAST),
+		new DieConfiguration(10, 6, 6, TargetStrategies.TARGET_AT_LEAST),
+		new DieConfiguration(10, 6, 8, TargetStrategies.TARGET_AT_LEAST),
+		new DieConfiguration(10, 6, 4, TargetStrategies.TARGET_AT_LEAST),
+		new DieConfiguration(10, 6, 10, TargetStrategies.TARGET_AT_LEAST)
 	);
 }

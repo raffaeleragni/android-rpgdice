@@ -1,11 +1,13 @@
 package app.rpgdices;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.TreeMap;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +32,13 @@ public class RPGDice extends Activity
 
 	private ArrayList<DieRow> rows = new ArrayList<DieRow>();
 
+	private HashMap<String, DiceSet> custom_dice_sets = new HashMap<String, DiceSet>();
+
 	private TextView result;
+
+	private SharedPreferences settings;
+
+	private SharedPreferences.Editor settings_editor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -40,8 +48,48 @@ public class RPGDice extends Activity
 
 		result = (TextView) findViewById(R.id.result);
 
-		// TODO: use profiles
-		loadDiceSet(DefaultDiceSets.dnd);
+		settings = getPreferences(MODE_PRIVATE);
+		settings_editor = settings.edit();
+
+		String[] sets = settings.getString("sets", "").split("|");
+		for (String set : sets)
+		{
+			if (set != null && set.length() > 0)
+			{
+				int num = settings.getInt("set_" + set + "_dicenum", 0);
+				DiceSet diceset = new DiceSet();
+				for (int i = 0; i < num; i++)
+				{
+					diceset.set.add(new DieConfiguration(settings.getInt("set_" + set + "_" + num + "_die", 6), settings.getInt(
+							"set_" + set + "_" + num + "_count", 1), settings.getInt("set_" + set + "_" + num + "_sum_or_target",
+							0), settings.getInt("set_" + set + "_" + num + "_strategy", TargetStrategies.NONE)));
+				}
+				custom_dice_sets.put(set, diceset);
+			}
+		}
+
+		String used_set = settings.getString("used_set", "dnd");
+
+		if ("dnd".equals(used_set))
+		{
+			loadDiceSet(DefaultDiceSets.dnd);
+		}
+		else if ("ww".equals(used_set))
+		{
+			loadDiceSet(DefaultDiceSets.ww);
+		}
+		else
+		{
+			DiceSet diceset = custom_dice_sets.get(used_set);
+			if (diceset != null)
+			{
+				loadDiceSet(diceset);
+			}
+			else
+			{
+				loadDiceSet(DefaultDiceSets.dnd);
+			}
+		}
 	}
 
 	private void loadDiceSet(DiceSet set)
@@ -52,12 +100,12 @@ public class RPGDice extends Activity
 
 		for (DieConfiguration c : set.set)
 		{
-			rows.add(newDieRow(c.die, c.sum, c.count, c.target_strategy, c.target));
+			rows.add(newDieRow(c.die, c.count, c.sum_or_target, c.target_strategy));
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private DieRow newDieRow(int ndie, int nsum, int ncount, int target_strategy, int target)
+	private DieRow newDieRow(int ndie, int ncount, int nsum_or_target, int target_strategy)
 	{
 		DieRow row = new DieRow();
 
@@ -89,18 +137,8 @@ public class RPGDice extends Activity
 		count.setWidth(60);
 		tr_controls.addView(count);
 
-		int val = 0;
-		switch (target_strategy)
-		{
-			case TargetStrategies.NONE:
-				val = nsum;
-				break;
-			case TargetStrategies.TARGET_AT_LEAST:
-				val = target;
-				break;
-		}
 		EditText sum = new EditText(this);
-		sum.setText("" + val);
+		sum.setText("" + nsum_or_target);
 		sum.setWidth(60);
 		tr_controls.addView(sum);
 
@@ -180,6 +218,11 @@ public class RPGDice extends Activity
 				Intent i = new Intent();
 				i.setClass(this, DNDStatsGeneratorActivity.class);
 				startActivity(i);
+				break;
+			}
+			case R.menu_id.change_set:
+			{
+
 				break;
 			}
 		}
