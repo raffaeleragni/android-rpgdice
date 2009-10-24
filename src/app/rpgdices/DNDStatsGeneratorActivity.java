@@ -37,12 +37,11 @@ public class DNDStatsGeneratorActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.stats_generator);
 		
-		random = new Random(System.currentTimeMillis());
-
 		((Button) findViewById(R.stats_id.roll)).setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
+				random = new Random(System.currentTimeMillis());
 				roll_stats((TextView) findViewById(R.stats_id.result1));
 				roll_stats((TextView) findViewById(R.stats_id.result2));
 			}
@@ -56,7 +55,14 @@ public class DNDStatsGeneratorActivity extends Activity
 		for (int i = 0; i < 6; i++)
 		{
 			rolled = roll_stat();
-			bonus = (rolled - 10) / 2;
+			if (rolled >= 10)
+			{
+				bonus = (rolled - 10) / 2;
+			}
+			else
+			{
+				bonus = (rolled - 11) / 2;	
+			}
 			sb.append("\n" + rolled + "  [ " + (bonus > 0 ? "+" : "") + bonus + " ]");
 		}
 		view.setText(sb.toString());
