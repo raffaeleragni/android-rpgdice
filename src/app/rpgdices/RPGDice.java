@@ -38,7 +38,7 @@ public class RPGDice extends Activity
 
 	private SharedPreferences settings;
 
-	private SharedPreferences.Editor settings_editor;
+	//private SharedPreferences.Editor settings_editor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -49,7 +49,7 @@ public class RPGDice extends Activity
 		result = (TextView) findViewById(R.id.result);
 
 		settings = getPreferences(MODE_PRIVATE);
-		settings_editor = settings.edit();
+		//settings_editor = settings.edit();
 
 		String[] sets = settings.getString("sets", "").split("|");
 		for (String set : sets)
