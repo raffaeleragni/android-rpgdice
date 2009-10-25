@@ -97,12 +97,12 @@ public class RPGDice extends Activity
 		if ("dnd".equals(used_set))
 		{
 			selected_dice_set = 0;
-			loadDiceSet("dnd", DefaultDiceSets.dnd);
+			loadDiceSet(selected_dice_set_key, DefaultDiceSets.dnd);
 		}
 		else if ("ww".equals(used_set))
 		{
 			selected_dice_set = 1;
-			loadDiceSet("ww", DefaultDiceSets.ww);
+			loadDiceSet(selected_dice_set_key, DefaultDiceSets.ww);
 		}
 		else
 		{
@@ -120,12 +120,12 @@ public class RPGDice extends Activity
 				}
 				selected_dice_set = pos + DEFAULT_DICE_SET_COUNT;
 				selected_dice_set_key = used_set;
-				loadDiceSet(used_set, diceset);
+				loadDiceSet(selected_dice_set_key, diceset);
 			}
 			else
 			{
 				selected_dice_set = 0;
-				loadDiceSet("dnd", DefaultDiceSets.dnd);
+				loadDiceSet(selected_dice_set_key, DefaultDiceSets.dnd);
 			}
 		}
 	}
@@ -517,14 +517,14 @@ public class RPGDice extends Activity
 							{
 								custom = false;
 								selected_dice_set_key = null;
-								loadDiceSet("dnd", DefaultDiceSets.dnd);
+								loadDiceSet(selected_dice_set_key, DefaultDiceSets.dnd);
 								break;
 							}
 							case DEFAULT_DICE_SET_WW:
 							{
 								custom = false;
 								selected_dice_set_key = null;
-								loadDiceSet("ww", DefaultDiceSets.ww);
+								loadDiceSet(selected_dice_set_key, DefaultDiceSets.ww);
 								break;
 							}
 							default:
