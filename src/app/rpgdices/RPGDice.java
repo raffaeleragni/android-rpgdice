@@ -348,17 +348,17 @@ public class RPGDice extends Activity
 
 		EditText die = new EditText(this);
 		die.setText("" + ndie);
-		die.setWidth(60);
+		die.setWidth(40);
 		tr_controls.addView(die);
 
 		EditText count = new EditText(this);
 		count.setText("" + ncount);
-		count.setWidth(60);
+		count.setWidth(40);
 		tr_controls.addView(count);
 
 		EditText sum = new EditText(this);
 		sum.setText("" + nsum_or_target);
-		sum.setWidth(60);
+		sum.setWidth(40);
 		tr_controls.addView(sum);
 
 		Spinner strategy = new Spinner(this);
