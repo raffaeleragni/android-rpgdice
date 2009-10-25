@@ -11,11 +11,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,6 +40,8 @@ public class RPGDice extends Activity
 
 	private static final int DIALOG_NEW_DIE_ONLY_ON_CUSTOM = 2;
 
+	private static final int DIALOG_NEW_SET_ALREADY_EXISTS = 3;
+
 	private static final int DEFAULT_DICE_SET_DND = 0;
 
 	private static final int DEFAULT_DICE_SET_WW = 1;
@@ -52,11 +56,13 @@ public class RPGDice extends Activity
 
 	private int selected_dice_set = 0;
 
+	private String selected_dice_set_key = null;
+
 	private boolean custom = false;
 
 	private SharedPreferences settings;
 
-	//private SharedPreferences.Editor settings_editor;
+	private SharedPreferences.Editor settings_editor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -67,7 +73,7 @@ public class RPGDice extends Activity
 		result = (TextView) findViewById(R.id.result);
 
 		settings = getPreferences(MODE_PRIVATE);
-		//settings_editor = settings.edit();
+		settings_editor = settings.edit();
 
 		String[] sets = settings.getString("sets", "").split("|");
 		for (String set : sets)
@@ -78,9 +84,9 @@ public class RPGDice extends Activity
 				DiceSet diceset = new DiceSet();
 				for (int i = 0; i < num; i++)
 				{
-					diceset.set.add(new DieConfiguration(settings.getInt("set_" + set + "_" + num + "_die", 6), settings.getInt(
-							"set_" + set + "_" + num + "_count", 1), settings.getInt("set_" + set + "_" + num + "_sum_or_target",
-							0), settings.getInt("set_" + set + "_" + num + "_strategy", TargetStrategies.NONE)));
+					diceset.set.add(new DieConfiguration(settings.getInt("set_" + set + "_" + i + "_die", 6), settings.getInt(
+							"set_" + set + "_" + i + "_count", 1), settings.getInt("set_" + set + "_" + i + "_sum_or_target", 0),
+							settings.getInt("set_" + set + "_" + i + "_strategy", TargetStrategies.NONE)));
 				}
 				custom_dice_sets.put(set, diceset);
 			}
@@ -91,12 +97,12 @@ public class RPGDice extends Activity
 		if ("dnd".equals(used_set))
 		{
 			selected_dice_set = 0;
-			loadDiceSet(DefaultDiceSets.dnd);
+			loadDiceSet("dnd", DefaultDiceSets.dnd);
 		}
 		else if ("ww".equals(used_set))
 		{
 			selected_dice_set = 1;
-			loadDiceSet(DefaultDiceSets.ww);
+			loadDiceSet("ww", DefaultDiceSets.ww);
 		}
 		else
 		{
@@ -113,17 +119,105 @@ public class RPGDice extends Activity
 					pos++;
 				}
 				selected_dice_set = pos + DEFAULT_DICE_SET_COUNT;
-				loadDiceSet(diceset);
+				selected_dice_set_key = used_set;
+				loadDiceSet(used_set, diceset);
 			}
 			else
 			{
 				selected_dice_set = 0;
-				loadDiceSet(DefaultDiceSets.dnd);
+				loadDiceSet("dnd", DefaultDiceSets.dnd);
 			}
 		}
 	}
 
-	private void loadDiceSet(DiceSet set)
+	private void createAndLoadDiceSet(String dicesetname)
+	{
+		DiceSet set = new DiceSet();
+
+		custom_dice_sets.put(dicesetname, set);
+		int pos = 0;
+		for (String k : custom_dice_sets.keySet())
+		{
+			if (k.equals(dicesetname))
+			{
+				break;
+			}
+			pos++;
+		}
+		custom = true;
+		selected_dice_set = pos;
+		selected_dice_set_key = dicesetname;
+
+		String sets = settings.getString("sets", "");
+		settings_editor.putString("sets", sets + "|" + dicesetname);
+		settings_editor.putInt("set_" + dicesetname + "_dicenum", 0);
+
+		settings_editor.commit();
+
+		loadDiceSet(dicesetname, set);
+	}
+
+	private void createDie(String dicesetname)
+	{
+		int num = settings.getInt("set_" + dicesetname + "_dicenum", 0);
+		settings_editor.putInt("set_" + dicesetname + "_" + num + "_die", 6);
+		settings_editor.putInt("set_" + dicesetname + "_" + num + "_count", 1);
+		settings_editor.putInt("set_" + dicesetname + "_" + num + "_sum_or_target", 0);
+		settings_editor.putInt("set_" + dicesetname + "_" + num + "_strategy", TargetStrategies.NONE);
+		num++;
+		settings_editor.putInt("set_" + dicesetname + "_dicenum", num);
+
+		custom_dice_sets.get(dicesetname).set.add(new DieConfiguration(6, 1, 0, TargetStrategies.NONE));
+
+		settings_editor.commit();
+	}
+
+	private void updateDie(String dicesetname, int num)
+	{
+		DiceSet ds = custom_dice_sets.get(dicesetname);
+		if (num < ds.set.size() && num < rows.size())
+		{
+			DieRow row = rows.get(num);
+			DieConfiguration dc = ds.set.get(num);
+
+			int die = 6, count = 1, sum_or_target = 0;
+			try
+			{
+				die = Integer.parseInt(row.die.getText().toString());
+			}
+			catch (NumberFormatException e)
+			{
+			}
+			try
+			{
+				count = Integer.parseInt(row.count.getText().toString());
+			}
+			catch (NumberFormatException e)
+			{
+			}
+			try
+			{
+				sum_or_target = Integer.parseInt(row.sum.getText().toString());
+			}
+			catch (NumberFormatException e)
+			{
+			}
+			int strategy = row.strategy.getSelectedItemPosition();
+
+			dc.die = die;
+			dc.count = count;
+			dc.sum_or_target = sum_or_target;
+			dc.target_strategy = strategy;
+
+			settings_editor.putInt("set_" + dicesetname + "_" + num + "_die", die);
+			settings_editor.putInt("set_" + dicesetname + "_" + num + "_count", count);
+			settings_editor.putInt("set_" + dicesetname + "_" + num + "_sum_or_target", sum_or_target);
+			settings_editor.putInt("set_" + dicesetname + "_" + num + "_strategy", strategy);
+			settings_editor.commit();
+		}
+	}
+
+	private void loadDiceSet(String dicesetname, DiceSet set)
 	{
 		TableLayout tl = (TableLayout) findViewById(R.id.dice_table);
 		tl.removeAllViews();
@@ -131,12 +225,12 @@ public class RPGDice extends Activity
 
 		for (DieConfiguration c : set.set)
 		{
-			rows.add(newDieRow(c.die, c.count, c.sum_or_target, c.target_strategy));
+			rows.add(newDieRow(dicesetname, c.die, c.count, c.sum_or_target, c.target_strategy));
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private DieRow newDieRow(int ndie, int ncount, int nsum_or_target, int target_strategy)
+	private DieRow newDieRow(String dicesetname, int ndie, int ncount, int nsum_or_target, int target_strategy)
 	{
 		DieRow row = new DieRow();
 
@@ -200,8 +294,12 @@ public class RPGDice extends Activity
 		strategy.setSelection(target_strategy);
 		tr_controls.addView(strategy);
 
+		die.setOnKeyListener(row.onedit_changed);
+		count.setOnKeyListener(row.onedit_changed);
+		sum.setOnKeyListener(row.onedit_changed);
 		roll_button.setOnClickListener(row.roll_clicked);
 		strategy.setOnItemSelectedListener(row.strategy_changed);
+		row.dicesetname = dicesetname;
 		row.die = die;
 		row.sum = sum;
 		row.count = count;
@@ -216,11 +314,31 @@ public class RPGDice extends Activity
 
 	private class DieRow
 	{
+		public String dicesetname;
 		public EditText die;
 		public EditText sum;
 		public EditText count;
 		public Spinner strategy;
 		public TextView sumlabel;
+
+		public OnKeyListener onedit_changed = new OnKeyListener()
+		{
+			public boolean onKey(View v, int keyCode, KeyEvent event)
+			{
+				if (!custom)
+				{
+					return true;
+				}
+
+				int idx = rows.indexOf(this);
+				if (idx != -1)
+				{
+					updateDie(dicesetname, idx);
+				}
+
+				return true;
+			}
+		};
 
 		public OnItemSelectedListener strategy_changed = new OnItemSelectedListener()
 		{
@@ -311,6 +429,8 @@ public class RPGDice extends Activity
 					break;
 				}
 
+				createDie(selected_dice_set_key);
+
 				break;
 			}
 		}
@@ -330,9 +450,46 @@ public class RPGDice extends Activity
 				return builder.create();
 			}
 
+			case DIALOG_NEW_SET_ALREADY_EXISTS:
+			{
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage(getResources().getText(R.string.NEW_SET_ALREADY_EXISTS));
+				return builder.create();
+			}
+
 			case DIALOG_NEW_SET:
 			{
-				break;
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+				builder.setTitle(R.string.DIALOG_NEW_SET_TITLE);
+				builder.setMessage(R.string.DIALOG_NEW_SET_MESSAGE);
+
+				final EditText input = new EditText(this);
+				builder.setView(input);
+				builder.setPositiveButton(R.string.DIALOG_NEW_SET_OK, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int whichButton)
+					{
+						if (!custom_dice_sets.containsKey(input.getText().toString()))
+						{
+							createAndLoadDiceSet(input.getText().toString());
+						}
+						else
+						{
+							showDialog(DIALOG_NEW_SET_ALREADY_EXISTS);
+						}
+						dialog.cancel();
+					}
+				});
+				builder.setNegativeButton(R.string.DIALOG_NEW_SET_CANCEL, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int whichButton)
+					{
+						dialog.cancel();
+					}
+				});
+
+				return builder.create();
 			}
 
 			case DIALOG_CHANGE_SET:
@@ -359,19 +516,22 @@ public class RPGDice extends Activity
 							case DEFAULT_DICE_SET_DND:
 							{
 								custom = false;
-								loadDiceSet(DefaultDiceSets.dnd);
+								selected_dice_set_key = null;
+								loadDiceSet("dnd", DefaultDiceSets.dnd);
 								break;
 							}
 							case DEFAULT_DICE_SET_WW:
 							{
 								custom = false;
-								loadDiceSet(DefaultDiceSets.ww);
+								selected_dice_set_key = null;
+								loadDiceSet("ww", DefaultDiceSets.ww);
 								break;
 							}
 							default:
 							{
 								custom = true;
-								loadDiceSet(custom_dice_sets.get(items[item]));
+								selected_dice_set_key = items[item].toString();
+								loadDiceSet(selected_dice_set_key, custom_dice_sets.get(selected_dice_set_key));
 								break;
 							}
 						}

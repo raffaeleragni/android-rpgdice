@@ -6,7 +6,6 @@ public class DieConfiguration
 	public int count;
 	public int sum_or_target;
 	public int target_strategy;
-	public int target;
 	
 	public DieConfiguration()
 	{

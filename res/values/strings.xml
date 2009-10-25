@@ -13,8 +13,13 @@
     <string name="MENU_OTHER_TOOLS">Other tools</string>
     <string name="MENU_DND_STATS_GENERATOR">DND Character Stats</string>
     <string name="NEW_DIE_ONLY_ON_CUSTOM">New Die can be added only on custom sets</string>
+    <string name="NEW_SET_ALREADY_EXISTS">Dice set already exists, choose another name</string>
     <string name="SET_DND">Dungeons and Dragons</string>
     <string name="SET_WW">White Wolf</string>
+    <string name="DIALOG_NEW_SET_TITLE">Create Set</string>
+    <string name="DIALOG_NEW_SET_MESSAGE">Choose the new dice set name</string>
+    <string name="DIALOG_NEW_SET_OK">Create</string>
+    <string name="DIALOG_NEW_SET_CANCEL">Cancel</string>
     <string-array name="STRATEGIES">
         <item>None</item>
         <item>Success</item>
