@@ -205,6 +205,12 @@ public class RPGDice extends Activity
 		sets = sets.replaceAll("\\|*" + dicesetname + "\\|*", "");
 		settings_editor.putString("sets", sets + "|" + dicesetname);
 		
+		custom_dice_sets.remove(dicesetname);
+
+		selected_dice_set = 0;
+		selected_dice_set_key = null;
+		loadDiceSet(selected_dice_set_key, DefaultDiceSets.dnd);
+		
 		settings_editor.commit();
 	}
 
@@ -222,10 +228,6 @@ public class RPGDice extends Activity
 
 		rows.add(newDieRow(dicesetname, 6, 1, 0, TargetStrategies.NONE));
 
-		selected_dice_set = 0;
-		selected_dice_set_key = null;
-		loadDiceSet(selected_dice_set_key, DefaultDiceSets.dnd);
-		
 		settings_editor.commit();
 	}
 
@@ -613,7 +615,6 @@ public class RPGDice extends Activity
 				{
 					public void onClick(DialogInterface dialog, int id)
 					{
-						dialog.cancel();
 						deleteDiceSet(selected_dice_set_key);
 					}
 				});
