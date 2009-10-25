@@ -8,11 +8,13 @@
     <string name="LABEL_4">Strategy</string>
     <string name="ROLL">Roll</string>
     <string name="MENU_NEW_SET">New Dice Set</string>
+    <string name="MENU_DELETE_SET">Delete Dice Set</string>
     <string name="MENU_CHANGE_SET">Change Dice Set</string>
     <string name="MENU_NEW_DIE">New Die</string>
     <string name="MENU_OTHER_TOOLS">Other tools</string>
     <string name="MENU_DND_STATS_GENERATOR">DND Character Stats</string>
     <string name="NEW_DIE_ONLY_ON_CUSTOM">New Die can be added only on custom sets</string>
+    <string name="DELETE_SET_ONLY_ON_CUSTOM">Only custom dice sets can be deleted</string>
     <string name="NEW_SET_ALREADY_EXISTS">Dice set already exists, choose another name</string>
     <string name="SET_DND">Dungeons and Dragons</string>
     <string name="SET_WW">White Wolf</string>
@@ -20,6 +22,9 @@
     <string name="DIALOG_NEW_SET_MESSAGE">Choose the new dice set name</string>
     <string name="DIALOG_NEW_SET_OK">Create</string>
     <string name="DIALOG_NEW_SET_CANCEL">Cancel</string>
+    <string name="DIALOG_DELETE_SET_TITLE">Sure to delete this set?</string>
+    <string name="DIALOG_DELETE_SET_YES">Yes</string>
+    <string name="DIALOG_DELETE_SET_NO">No</string>
     <string-array name="STRATEGIES">
         <item>None</item>
         <item>Success</item>
