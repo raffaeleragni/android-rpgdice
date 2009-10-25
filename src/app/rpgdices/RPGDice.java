@@ -100,11 +100,13 @@ public class RPGDice extends Activity
 
 		if ("dnd".equals(used_set))
 		{
+			custom = false;
 			selected_dice_set = 0;
 			loadDiceSet(selected_dice_set_key, DefaultDiceSets.dnd);
 		}
 		else if ("ww".equals(used_set))
 		{
+			custom = false;
 			selected_dice_set = 1;
 			loadDiceSet(selected_dice_set_key, DefaultDiceSets.ww);
 		}
@@ -124,10 +126,12 @@ public class RPGDice extends Activity
 				}
 				selected_dice_set = pos + DEFAULT_DICE_SET_COUNT;
 				selected_dice_set_key = used_set;
+				custom = true;
 				loadDiceSet(selected_dice_set_key, diceset);
 			}
 			else
 			{
+				custom = false;
 				selected_dice_set = 0;
 				loadDiceSet(selected_dice_set_key, DefaultDiceSets.dnd);
 			}
@@ -143,6 +147,7 @@ public class RPGDice extends Activity
 			{
 				custom = false;
 				selected_dice_set_key = null;
+				settings_editor.putString("used_set", "dnd");
 				loadDiceSet(selected_dice_set_key, DefaultDiceSets.dnd);
 				break;
 			}
@@ -150,6 +155,7 @@ public class RPGDice extends Activity
 			{
 				custom = false;
 				selected_dice_set_key = null;
+				settings_editor.putString("used_set", "ww");
 				loadDiceSet(selected_dice_set_key, DefaultDiceSets.ww);
 				break;
 			}
@@ -157,10 +163,13 @@ public class RPGDice extends Activity
 			{
 				custom = true;
 				selected_dice_set_key = dicesetname;
+				settings_editor.putString("used_set", dicesetname);
 				loadDiceSet(selected_dice_set_key, custom_dice_sets.get(selected_dice_set_key));
 				break;
 			}
 		}
+		
+		settings_editor.commit();
 	}
 
 	private void createAndLoadDiceSet(String dicesetname)
@@ -192,6 +201,8 @@ public class RPGDice extends Activity
 
 	private void deleteDiceSet(String dicesetname)
 	{
+		custom_dice_sets.remove(dicesetname);
+
 		int num = settings.getInt("set_" + dicesetname + "_dicenum", 0);
 		for (int i = 0; i < num; i++)
 		{
@@ -201,17 +212,20 @@ public class RPGDice extends Activity
 			settings_editor.remove("set_" + dicesetname + "_" + i + "_strategy");
 		}
 		settings_editor.remove("set_" + dicesetname + "_dicenum");
-		String sets = settings.getString("sets", "");
-		sets = sets.replaceAll("\\|*" + dicesetname + "\\|*", "");
-		settings_editor.putString("sets", sets + "|" + dicesetname);
 		
-		custom_dice_sets.remove(dicesetname);
+		String sets = null;
+		for (String set : custom_dice_sets.keySet())
+		{
+			sets = sets == null ? set : sets + "|" + set;
+		}
+		settings_editor.putString("sets", sets == null ? "" : sets);
 
+		settings_editor.commit();
+		
+		custom = false;
 		selected_dice_set = 0;
 		selected_dice_set_key = null;
 		loadDiceSet(selected_dice_set_key, DefaultDiceSets.dnd);
-		
-		settings_editor.commit();
 	}
 
 	private void createDie(String dicesetname)
@@ -281,6 +295,7 @@ public class RPGDice extends Activity
 		TableLayout tl = (TableLayout) findViewById(R.id.dice_table);
 		tl.removeAllViews();
 		rows.clear();
+		result.setText("");
 
 		for (DieConfiguration c : set.set)
 		{
@@ -392,7 +407,7 @@ public class RPGDice extends Activity
 
 				if (custom)
 				{
-					int idx = rows.indexOf(this);
+					int idx = rows.indexOf(DieRow.this);
 					if (idx != -1)
 					{
 						updateDie(dicesetname, idx);
