@@ -325,18 +325,16 @@ public class RPGDice extends Activity
 		{
 			public boolean onKey(View v, int keyCode, KeyEvent event)
 			{
-				if (!custom)
+				if (custom)
 				{
-					return true;
+					int idx = rows.indexOf(this);
+					if (idx != -1)
+					{
+						updateDie(dicesetname, idx);
+					}
 				}
 
-				int idx = rows.indexOf(this);
-				if (idx != -1)
-				{
-					updateDie(dicesetname, idx);
-				}
-
-				return true;
+				return false;
 			}
 		};
 
@@ -351,6 +349,15 @@ public class RPGDice extends Activity
 				else
 				{
 					sumlabel.setText("  " + getResources().getString(R.string.LABEL_3));
+				}
+				
+				if (custom)
+				{
+					int idx = rows.indexOf(this);
+					if (idx != -1)
+					{
+						updateDie(dicesetname, idx);
+					}
 				}
 			}
 
