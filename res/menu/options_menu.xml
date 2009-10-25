@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:visible="false" android:title="New Set" android:id="@+menu_id/new_set"></item>
-	<item android:visible="false" android:title="Change Set" android:id="@+menu_id/change_set"></item>
-	<item android:visible="false" android:title="New Die" android:id="@+menu_id/new_die"></item>
-	<item android:title="Other Tools" android:id="@+menu_id/other_tools">
+	<item android:title="@string/MENU_NEW_SET" android:id="@+menu_id/new_set"></item>
+	<item android:title="@string/MENU_CHANGE_SET" android:id="@+menu_id/change_set"></item>
+	<item android:title="@string/MENU_NEW_DIE" android:id="@+menu_id/new_die"></item>
+	<item android:title="@string/MENU_OTHER_TOOLS" android:id="@+menu_id/other_tools">
 		<menu>
-			<item android:title="DND Character Stats" android:id="@+menu_id/dnd_character_stats"> </item>
+			<item android:title="@string/MENU_DND_STATS_GENERATOR" android:id="@+menu_id/dnd_character_stats"> </item>
 		</menu>
 	</item>
 </menu>

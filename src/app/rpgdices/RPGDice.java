@@ -1,11 +1,13 @@
 package app.rpgdices;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.TreeMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,20 +24,35 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 import app.rpgdices.data.DiceSet;
 import app.rpgdices.data.DieConfiguration;
 import app.rpgdices.data.TargetStrategies;
 
 public class RPGDice extends Activity
 {
-	private static final int[] LABEL_CODES = new int[] { R.string.LABEL_0, R.string.LABEL_1, R.string.LABEL_2, R.string.LABEL_3,
-			R.string.LABEL_4 };
+	private static final int DIALOG_CHANGE_SET = 0;
+
+	private static final int DIALOG_NEW_SET = 1;
+
+	private static final int DIALOG_NEW_DIE_ONLY_ON_CUSTOM = 2;
+
+	private static final int DEFAULT_DICE_SET_DND = 0;
+
+	private static final int DEFAULT_DICE_SET_WW = 1;
+
+	private static final int DEFAULT_DICE_SET_COUNT = 2;
 
 	private ArrayList<DieRow> rows = new ArrayList<DieRow>();
 
-	private HashMap<String, DiceSet> custom_dice_sets = new HashMap<String, DiceSet>();
+	private TreeMap<String, DiceSet> custom_dice_sets = new TreeMap<String, DiceSet>();
 
 	private TextView result;
+
+	private int selected_dice_set = 0;
+
+	private boolean custom = false;
 
 	private SharedPreferences settings;
 
@@ -72,10 +90,12 @@ public class RPGDice extends Activity
 
 		if ("dnd".equals(used_set))
 		{
+			selected_dice_set = 0;
 			loadDiceSet(DefaultDiceSets.dnd);
 		}
 		else if ("ww".equals(used_set))
 		{
+			selected_dice_set = 1;
 			loadDiceSet(DefaultDiceSets.ww);
 		}
 		else
@@ -83,10 +103,21 @@ public class RPGDice extends Activity
 			DiceSet diceset = custom_dice_sets.get(used_set);
 			if (diceset != null)
 			{
+				int pos = 0;
+				for (String k : custom_dice_sets.keySet())
+				{
+					if (k.equals(used_set))
+					{
+						break;
+					}
+					pos++;
+				}
+				selected_dice_set = pos + DEFAULT_DICE_SET_COUNT;
 				loadDiceSet(diceset);
 			}
 			else
 			{
+				selected_dice_set = 0;
 				loadDiceSet(DefaultDiceSets.dnd);
 			}
 		}
@@ -114,12 +145,32 @@ public class RPGDice extends Activity
 		TableRow tr_labels = new TableRow(this);
 		TableRow tr_controls = new TableRow(this);
 
-		for (int code : LABEL_CODES)
+		TextView label_0 = new TextView(this);
+		label_0.setText("  ");
+		tr_labels.addView(label_0);
+
+		TextView label_1 = new TextView(this);
+		label_1.setText("  " + getResources().getString(R.string.LABEL_1));
+		tr_labels.addView(label_1);
+
+		TextView label_2 = new TextView(this);
+		label_2.setText("  " + getResources().getString(R.string.LABEL_2));
+		tr_labels.addView(label_2);
+
+		TextView label_3 = new TextView(this);
+		if (target_strategy == TargetStrategies.TARGET_AT_LEAST)
 		{
-			TextView label = new TextView(this);
-			label.setText("  " + getResources().getString(code));
-			tr_labels.addView(label);
+			label_3.setText("  " + getResources().getString(R.string.LABEL_3_T));
 		}
+		else
+		{
+			label_3.setText("  " + getResources().getString(R.string.LABEL_3));
+		}
+		tr_labels.addView(label_3);
+
+		TextView label_4 = new TextView(this);
+		label_4.setText("  " + getResources().getString(R.string.LABEL_4));
+		tr_labels.addView(label_4);
 
 		Button roll_button = new Button(this);
 		roll_button.setText(getResources().getString(R.string.ROLL));
@@ -150,10 +201,12 @@ public class RPGDice extends Activity
 		tr_controls.addView(strategy);
 
 		roll_button.setOnClickListener(row.roll_clicked);
+		strategy.setOnItemSelectedListener(row.strategy_changed);
 		row.die = die;
 		row.sum = sum;
 		row.count = count;
 		row.strategy = strategy;
+		row.sumlabel = label_3;
 
 		tl.addView(tr_labels);
 		tl.addView(tr_controls);
@@ -167,6 +220,26 @@ public class RPGDice extends Activity
 		public EditText sum;
 		public EditText count;
 		public Spinner strategy;
+		public TextView sumlabel;
+
+		public OnItemSelectedListener strategy_changed = new OnItemSelectedListener()
+		{
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+			{
+				if (position == TargetStrategies.TARGET_AT_LEAST)
+				{
+					sumlabel.setText("  " + getResources().getString(R.string.LABEL_3_T));
+				}
+				else
+				{
+					sumlabel.setText("  " + getResources().getString(R.string.LABEL_3));
+				}
+			}
+
+			public void onNothingSelected(AdapterView<?> parent)
+			{
+			}
+		};
 
 		public OnClickListener roll_clicked = new OnClickListener()
 		{
@@ -222,12 +295,93 @@ public class RPGDice extends Activity
 			}
 			case R.menu_id.change_set:
 			{
+				showDialog(DIALOG_CHANGE_SET);
+				break;
+			}
+			case R.menu_id.new_set:
+			{
+				showDialog(DIALOG_NEW_SET);
+				break;
+			}
+			case R.menu_id.new_die:
+			{
+				if (!custom)
+				{
+					showDialog(DIALOG_NEW_DIE_ONLY_ON_CUSTOM);
+					break;
+				}
 
 				break;
 			}
 		}
 
-		return super.onMenuItemSelected(featureId, item);
+		return true;
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id)
+	{
+		switch (id)
+		{
+			case DIALOG_NEW_DIE_ONLY_ON_CUSTOM:
+			{
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage(getResources().getText(R.string.NEW_DIE_ONLY_ON_CUSTOM));
+				return builder.create();
+			}
+
+			case DIALOG_NEW_SET:
+			{
+				break;
+			}
+
+			case DIALOG_CHANGE_SET:
+			{
+				ArrayList<CharSequence> sets = new ArrayList<CharSequence>();
+				sets.add(getResources().getString(R.string.SET_DND));
+				sets.add(getResources().getString(R.string.SET_WW));
+				for (String k : custom_dice_sets.keySet())
+				{
+					sets.add(k);
+				}
+				final CharSequence[] items = sets.toArray(new CharSequence[] {});
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Choose a dice set");
+				builder.setSingleChoiceItems(items, selected_dice_set, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int item)
+					{
+						dialog.cancel();
+						selected_dice_set = item;
+						switch (item)
+						{
+							case DEFAULT_DICE_SET_DND:
+							{
+								custom = false;
+								loadDiceSet(DefaultDiceSets.dnd);
+								break;
+							}
+							case DEFAULT_DICE_SET_WW:
+							{
+								custom = false;
+								loadDiceSet(DefaultDiceSets.ww);
+								break;
+							}
+							default:
+							{
+								custom = true;
+								loadDiceSet(custom_dice_sets.get(items[item]));
+								break;
+							}
+						}
+					}
+				});
+				return builder.create();
+			}
+		}
+
+		return super.onCreateDialog(id);
 	}
 
 	private static String roll(int die, int sum_or_target, int count, int strategy)
@@ -299,5 +453,10 @@ public class RPGDice extends Activity
 		}
 
 		return "";
+	}
+
+	public void toast(String message)
+	{
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 	}
 }
