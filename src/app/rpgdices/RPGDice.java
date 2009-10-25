@@ -433,7 +433,7 @@ public class RPGDice extends Activity
 
 				if (custom)
 				{
-					int idx = rows.indexOf(this);
+					int idx = rows.indexOf(DieRow.this);
 					if (idx != -1)
 					{
 						updateDie(dicesetname, idx);
