@@ -5,12 +5,14 @@
     <string name="LABEL_2">Count</string>
     <string name="LABEL_3">Sum</string>
     <string name="LABEL_3_T">Target</string>
+    <string name="LABEL_3_TH">Threshold</string>
     <string name="LABEL_4">Strategy</string>
     <string name="ROLL">Roll</string>
     <string name="MENU_NEW_SET">New Dice Set</string>
     <string name="MENU_DELETE_SET">Delete Dice Set</string>
     <string name="MENU_CHANGE_SET">Change Dice Set</string>
     <string name="MENU_NEW_DIE">New Die</string>
+    <string name="MENU_ABOUT">About</string>
     <string name="MENU_OTHER_TOOLS">Other tools</string>
     <string name="MENU_DND_STATS_GENERATOR">DND Character Stats</string>
     <string name="NEW_DIE_ONLY_ON_CUSTOM">New Die can be added only on custom sets</string>
@@ -28,5 +30,7 @@
     <string-array name="STRATEGIES">
         <item>None</item>
         <item>Success</item>
+        <item>Roll again</item>
     </string-array>
+    <string name="MESSAGE_ABOUT"><![CDATA[Developed by Raffaele Ragni (raffaele.ragni@gmail.com),\n\nThreshold Strategy by Lionel Dulout (lionel.dulout@gmail.com)]]></string>
 </resources>

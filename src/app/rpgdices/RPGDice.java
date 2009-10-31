@@ -11,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.DigitsKeyListener;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,9 +44,11 @@ public class RPGDice extends Activity
 
 	private static final int DIALOG_NEW_SET_ALREADY_EXISTS = 3;
 
+	private static final int DIALOG_DELETE_SET = 4;
+	
 	private static final int DIALOG_DELETE_SET_ONLY_ON_CUSTOM = 5;
 	
-	private static final int DIALOG_DELETE_SET = 4;
+	private static final int DIALOG_ABOUT = 6;
 
 	private static final int DEFAULT_DICE_SET_DND = 0;
 
@@ -349,16 +353,22 @@ public class RPGDice extends Activity
 		EditText die = new EditText(this);
 		die.setText("" + ndie);
 		die.setWidth(50);
+		die.setKeyListener(new DigitsKeyListener(false, false));
+		die.setInputType(InputType.TYPE_CLASS_NUMBER);
 		tr_controls.addView(die);
 
 		EditText count = new EditText(this);
 		count.setText("" + ncount);
 		count.setWidth(50);
+		count.setKeyListener(new DigitsKeyListener(false, false));
+		count.setInputType(InputType.TYPE_CLASS_NUMBER);
 		tr_controls.addView(count);
 
 		EditText sum = new EditText(this);
 		sum.setText("" + nsum_or_target);
 		sum.setWidth(50);
+		sum.setKeyListener(new DigitsKeyListener(false, false));
+		sum.setInputType(InputType.TYPE_CLASS_NUMBER);
 		tr_controls.addView(sum);
 
 		Spinner strategy = new Spinner(this);
@@ -399,12 +409,6 @@ public class RPGDice extends Activity
 		{
 			public boolean onKey(View v, int keyCode, KeyEvent event)
 			{
-				//				if (!(keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9))
-				//				{
-				//					// invalidate the key, how?
-				//					return true;
-				//				}
-
 				if (custom)
 				{
 					int idx = rows.indexOf(DieRow.this);
@@ -425,6 +429,12 @@ public class RPGDice extends Activity
 				if (position == TargetStrategies.TARGET_AT_LEAST)
 				{
 					sumlabel.setText("  " + getResources().getString(R.string.LABEL_3_T));
+				}
+				else if (position == TargetStrategies.ROLL_AGAIN)
+				{
+					sumlabel.setText("  " + getResources().getString(R.string.LABEL_3_TH));
+					//By default, the threshold is the higher value from the die
+					sum.setText(die.getText().toString());
 				}
 				else
 				{
@@ -529,6 +539,11 @@ public class RPGDice extends Activity
 
 				createDie(selected_dice_set_key);
 
+				break;
+			}
+			case R.menu_id.about:
+			{
+				showDialog(DIALOG_ABOUT);
 				break;
 			}
 		}
@@ -642,6 +657,12 @@ public class RPGDice extends Activity
 				});
 				return builder.create();
 			}
+			case DIALOG_ABOUT:
+			{
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage(getResources().getText(R.string.MESSAGE_ABOUT));
+				return builder.create();
+			}
 		}
 
 		return super.onCreateDialog(id);
@@ -712,6 +733,35 @@ public class RPGDice extends Activity
 				sresults += "\nSuccesses: " + successes;
 
 				return sresults;
+			}
+			case TargetStrategies.ROLL_AGAIN :
+			{
+				TreeMap<Integer, Integer> results = new TreeMap<Integer, Integer>();
+				StringBuilder sb = new StringBuilder(30);
+				for (int i = 0 ; i < count ; ++i) {
+					int result = 0;
+					int roll = 0;
+					for (roll = random.nextInt(die) + 1 ; roll == sum_or_target ; roll = random.nextInt(die) + 1){
+						result += roll;
+					}
+					result += roll;
+					if (!results.containsKey(result))
+					{
+						results.put(result, 1);
+					}
+					else
+					{
+						results.put(result, results.get(result) + 1);
+					}
+				}
+				for (Integer k : results.keySet())
+				{
+					if (sb.length()>0) {
+						sb.append(", ");
+					}
+					sb.append(k).append("(").append(results.get(k)).append(")");
+				}
+				return sb.toString();
 			}
 		}
 
