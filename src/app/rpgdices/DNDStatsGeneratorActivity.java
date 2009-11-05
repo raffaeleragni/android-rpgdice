@@ -51,7 +51,7 @@ public class DNDStatsGeneratorActivity extends Activity
 	private void roll_stats(TextView view)
 	{
 		int rolled = 0, bonus = 0;
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < 6; i++)
 		{
 			rolled = roll_stat();
