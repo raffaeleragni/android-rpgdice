@@ -307,7 +307,7 @@ public class RPGDice extends Activity
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private DieRow newDieRow(String dicesetname, int ndie, int ncount, int nsum_or_target, int target_strategy)
 	{
 		DieRow row = new DieRow();
